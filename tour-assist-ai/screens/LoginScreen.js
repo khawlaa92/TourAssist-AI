@@ -51,7 +51,7 @@ export const LoginScreen = ({ navigation }) => {
 
     if (!hasError) {
       // Navigate to home screen
-      navigation.replace('Home');
+      navigation.replace('MainTabs');
     }
   };
 
@@ -168,7 +168,7 @@ export const LoginScreen = ({ navigation }) => {
               },
             ]}
           >
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
           </Text>
           <CustomButton
             title="Sign Up"

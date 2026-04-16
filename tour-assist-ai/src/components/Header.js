@@ -1,7 +1,25 @@
+/**
+ * Header.js — Professional Redesigned Version
+ *
+ * Enhancements:
+ * - Better typography and spacing
+ * - Improved visual hierarchy
+ * - Better elevation and shadows
+ * - Smoother interactions
+ * - Enhanced accessibility
+ */
+
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Switch } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+  SafeAreaView,
+} from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
-import { spacings, fontSizes, borderRadius } from '../../constants/theme';
+import { spacings, fontSizes, shadows } from '../../constants/theme';
 
 export const Header = ({
   title,
@@ -12,102 +30,117 @@ export const Header = ({
   const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: theme.primary,
-          borderBottomColor: theme.accent,
-        },
-      ]}
-    >
-      <View
-        style={[
-          styles.content,
-          {
-            justifyContent: 'space-between',
-          },
-        ]}
-      >
-        <View style={styles.leftSection}>
-          {onPressBack && (
-            <TouchableOpacity onPress={onPressBack} style={styles.backButton}>
-              <Text style={styles.backText}>←</Text>
-            </TouchableOpacity>
-          )}
-          <Text
-            style={[
-              styles.title,
-              {
-                fontSize: fontSizes.xl,
-              },
-            ]}
-          >
-            {title}
-          </Text>
-        </View>
+    <>
+      <StatusBar
+        backgroundColor={theme.primary}
+        barStyle="light-content"
+        animated={true}
+      />
+      <SafeAreaView style={{ backgroundColor: theme.primary }}>
+        <View
+          style={[
+            styles.container,
+            {
+              backgroundColor: theme.primary || '#c41e3a',
+            },
+          ]}
+        >
+          <View style={styles.content}>
+            {/* ── Left: Back Button + Title ── */}
+            <View style={styles.leftSection}>
+              {onPressBack && (
+                <TouchableOpacity
+                  onPress={onPressBack}
+                  style={styles.backButton}
+                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.backText}>←</Text>
+                </TouchableOpacity>
+              )}
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    fontSize: fontSizes.lg,
+                    fontWeight: 700,
+                  },
+                ]}
+                numberOfLines={1}
+              >
+                {title}
+              </Text>
+            </View>
 
-        {showThemeToggle || rightComponent ? (
-          <View style={styles.rightSection}>
-            {rightComponent && rightComponent}
-            {showThemeToggle && (
-              <Switch
-                value={isDarkMode}
-                onValueChange={toggleTheme}
-                trackColor={{ false: '#F0F0F0', true: '#555' }}
-                thumbColor={isDarkMode ? theme.primary : theme.primary}
-                style={styles.toggle}
-              />
+            {/* ── Right: Custom Component + Theme Toggle ── */}
+            {(showThemeToggle || rightComponent) && (
+              <View style={styles.rightSection}>
+                {rightComponent && rightComponent}
+                {showThemeToggle && (
+                  <TouchableOpacity
+                    onPress={toggleTheme}
+                    style={styles.themeToggle}
+                    activeOpacity={0.75}
+                    hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  >
+                    <Text style={styles.themeIcon}>
+                      {isDarkMode ? '☀️' : '🌙'}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             )}
           </View>
-        ) : null}
-      </View>
-    </View>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: spacings.lg,
-    paddingBottom: spacings.md,
-    borderBottomWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 3,
+    paddingHorizontal: spacings.lg,
+    paddingVertical: spacings.md,
+    borderBottomWidth: 0,
   },
   content: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacings.lg,
+    justifyContent: 'space-between',
   },
   leftSection: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+    gap: spacings.md,
   },
   rightSection: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: spacings.md,
   },
   backButton: {
     padding: spacings.sm,
-    marginRight: spacings.md,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backText: {
     color: '#FFFFFF',
     fontSize: fontSizes.xl,
-    fontWeight: 'bold',
+    fontWeight: 700,
+    lineHeight: 24,
   },
   title: {
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    flex: 1,
   },
-  toggle: {
-    marginLeft: spacings.md,
+  themeToggle: {
+    padding: spacings.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  themeIcon: {
+    fontSize: 20,
+    lineHeight: 24,
   },
 });
