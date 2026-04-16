@@ -11,7 +11,7 @@ import {
 import { ThemeContext } from '../src/context/ThemeContext';
 import { Header } from '../src/components/Header';
 import { CustomInput } from '../src/components/CustomInput';
-import { spacings, fontSizes, borderRadius } from '../constants/theme';
+import { spacings, fontSizes, borderRadius, shadows } from '../constants/theme';
 
 const CURRENCIES = [
   { code: 'TND', label: 'Dinar tunisien', symbol: 'DT', flag: '🇹🇳' },
@@ -116,6 +116,8 @@ export const MoneyConverterScreen = ({ navigation }) => {
   const targetAmount = convertedValues.find(
     (currency) => currency.code === targetCurrency
   )?.value;
+  const surfaceColor = isDarkMode ? '#191919' : '#FFFFFF';
+  const mutedSurface = isDarkMode ? '#222222' : '#F7F7F7';
 
   const handleSelectSourceCurrency = (currencyCode) => {
     setBaseCurrency(currencyCode);
@@ -292,18 +294,35 @@ export const MoneyConverterScreen = ({ navigation }) => {
       >
         <View
           style={[
+            styles.heroCard,
+            {
+              backgroundColor: isDarkMode ? '#211416' : '#FFF5F6',
+              borderColor: isDarkMode ? '#3A2327' : '#F3D7DC',
+            },
+          ]}
+        >
+          <View style={styles.heroBadge}>
+            <Text style={styles.heroBadgeText}>Money</Text>
+          </View>
+          <Text style={[styles.mainTitle, { color: theme.text }]}>
+            Convertisseur de devises
+          </Text>
+          <Text style={[styles.mainSubtitle, { color: theme.textSecondary }]}>
+            Une interface plus simple pour convertir rapidement votre argent.
+          </Text>
+        </View>
+
+        <View
+          style={[
             styles.mainCard,
             {
-              backgroundColor: isDarkMode ? '#181818' : '#FFFFFF',
+              backgroundColor: surfaceColor,
               borderColor: theme.border,
             },
           ]}
         >
-          <Text style={[styles.mainTitle, { color: theme.text }]}>
-            Conversion d&apos;argent
-          </Text>
-          <Text style={[styles.mainSubtitle, { color: theme.textSecondary }]}>
-            Choisissez les devises et entrez le montant.
+          <Text style={[styles.sectionLabel, { color: theme.primary }]}>
+            Parametres
           </Text>
 
           <View style={styles.block}>
@@ -330,7 +349,7 @@ export const MoneyConverterScreen = ({ navigation }) => {
             style={[
               styles.swapButton,
               {
-                backgroundColor: isDarkMode ? '#202020' : theme.lightRed,
+                backgroundColor: mutedSurface,
                 borderColor: theme.border,
               },
             ]}
@@ -356,7 +375,15 @@ export const MoneyConverterScreen = ({ navigation }) => {
             })}
           </View>
 
-          <View style={styles.block}>
+          <View
+            style={[
+              styles.amountCard,
+              {
+                backgroundColor: mutedSurface,
+                borderColor: theme.border,
+              },
+            ]}
+          >
             <Text style={[styles.inputLabel, { color: theme.textSecondary }]}>
               Montant
             </Text>
@@ -401,19 +428,47 @@ const styles = StyleSheet.create({
     padding: spacings.lg,
     paddingBottom: spacings.xl * 5,
   },
+  heroCard: {
+    borderWidth: 1,
+    borderRadius: borderRadius.xxl,
+    padding: spacings.xl,
+    marginBottom: spacings.xl,
+  },
+  heroBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#C41E3A',
+    borderRadius: borderRadius.full,
+    paddingHorizontal: spacings.md,
+    paddingVertical: spacings.xs,
+    marginBottom: spacings.md,
+  },
+  heroBadgeText: {
+    color: '#FFFFFF',
+    fontSize: fontSizes.xs,
+    fontWeight: '700',
+  },
   mainCard: {
     borderWidth: 1,
     borderRadius: borderRadius.xl,
     padding: spacings.lg,
+    ...shadows.sm,
   },
   mainTitle: {
-    fontSize: fontSizes.xl,
+    fontSize: fontSizes.xxl,
     fontWeight: '700',
-    marginBottom: spacings.xs,
+    marginBottom: spacings.sm,
   },
   mainSubtitle: {
-    fontSize: fontSizes.sm,
+    fontSize: fontSizes.md,
+    lineHeight: 22,
     marginBottom: spacings.lg,
+  },
+  sectionLabel: {
+    fontSize: fontSizes.xs,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+    marginBottom: spacings.sm,
   },
   block: {
     marginBottom: spacings.md,
@@ -526,8 +581,14 @@ const styles = StyleSheet.create({
     fontSize: fontSizes.sm,
     fontWeight: '700',
   },
+  amountCard: {
+    marginTop: spacings.xs,
+    marginBottom: spacings.md,
+    borderWidth: 1,
+    borderRadius: borderRadius.xl,
+    padding: spacings.lg,
+  },
   resultCard: {
-    marginTop: spacings.sm,
     borderWidth: 1.5,
     borderRadius: borderRadius.xl,
     padding: spacings.xl,

@@ -10,6 +10,7 @@ import {
 import { ThemeContext } from '../src/context/ThemeContext';
 import { CustomButton } from '../src/components/CustomButton';
 import { CustomInput } from '../src/components/CustomInput';
+import { BrandLogo } from '../src/components/BrandLogo';
 import { spacings, fontSizes, borderRadius } from '../constants/theme';
 
 export const LoginScreen = ({ navigation }) => {
@@ -69,27 +70,16 @@ export const LoginScreen = ({ navigation }) => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Logo Placeholder */}
         <View
           style={[
             styles.logoContainer,
             {
-              backgroundColor: theme.primary,
+              backgroundColor: theme.background,
+              borderColor: theme.border,
             },
           ]}
         >
-          <Text style={styles.logoText}>🧭</Text>
-          <Text
-            style={[
-              styles.appName,
-              {
-                color: '#FFFFFF',
-                fontSize: fontSizes.xxl,
-              },
-            ]}
-          >
-            TourAssist AI
-          </Text>
+          <BrandLogo size="xl" />
         </View>
 
         {/* Title */}
@@ -200,14 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: spacings.xxl,
     paddingVertical: spacings.xl,
     borderRadius: borderRadius.xxl,
-  },
-  logoText: {
-    fontSize: 64,
-    marginBottom: spacings.md,
-  },
-  appName: {
-    fontWeight: 'bold',
-    letterSpacing: 1,
+    borderWidth: 1,
   },
   title: {
     fontWeight: 'bold',

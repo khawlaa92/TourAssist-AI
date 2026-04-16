@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { ThemeContext } from '../src/context/ThemeContext';
 import { Header } from '../src/components/Header';
-import { spacings, fontSizes, borderRadius } from '../constants/theme';
+import { spacings, fontSizes, borderRadius, shadows } from '../constants/theme';
 
 const FEATURES = [
   {
@@ -48,6 +48,8 @@ const FEATURES = [
 
 export const HomeScreen = ({ navigation }) => {
   const { theme, isDarkMode } = useContext(ThemeContext);
+  const surfaceColor = isDarkMode ? '#191919' : '#FFFFFF';
+  const mutedSurface = isDarkMode ? '#222222' : '#F7F7F7';
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
@@ -57,43 +59,79 @@ export const HomeScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <View style={styles.titleBlock}>
+        <View
+          style={[
+            styles.heroCard,
+            {
+              backgroundColor: isDarkMode ? '#211416' : '#FFF5F6',
+              borderColor: isDarkMode ? '#3A2327' : '#F3D7DC',
+            },
+          ]}
+        >
+          <View style={styles.heroBadge}>
+            <Text style={styles.heroBadgeText}>TourAssist</Text>
+          </View>
           <Text style={[styles.pageTitle, { color: theme.text }]}>
-            Fonctionnalites principales
+            Votre assistant de voyage
           </Text>
           <Text style={[styles.pageSubtitle, { color: theme.textSecondary }]}>
-            Accedez rapidement aux outils utiles pour votre voyage.
+            Une page d&apos;accueil plus simple, avec les outils essentiels a portee
+            de main.
           </Text>
         </View>
 
-        {FEATURES.map((feature) => (
-          <TouchableOpacity
-            key={feature.id}
-            style={[
-              styles.featureRow,
-              {
-                backgroundColor: isDarkMode ? '#1E1E1E' : '#FFFFFF',
-                borderColor: theme.border,
-                shadowColor: feature.color,
-              },
-            ]}
-            onPress={() => navigation.navigate(feature.screen)}
-            activeOpacity={0.75}
-          >
-            <View style={[styles.featureIconBg, { backgroundColor: `${feature.color}22` }]}>
-              <Text style={styles.featureIconText}>{feature.icon}</Text>
-            </View>
-            <View style={styles.featureTextBlock}>
-              <Text style={[styles.featureTitle, { color: theme.text }]}>
-                {feature.title}
-              </Text>
+        <View
+          style={[
+            styles.sectionCard,
+            {
+              backgroundColor: surfaceColor,
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          <Text style={[styles.sectionLabel, { color: theme.primary }]}>
+            Acces rapide
+          </Text>
+          <Text style={[styles.sectionTitle, { color: theme.text }]}>
+            Fonctionnalites principales
+          </Text>
+          <Text style={[styles.sectionSubtitle, { color: theme.textSecondary }]}>
+            Choisissez l&apos;outil dont vous avez besoin pour continuer votre
+            voyage.
+          </Text>
+
+          <View style={styles.featureGrid}>
+            {FEATURES.map((feature) => (
+              <TouchableOpacity
+                key={feature.id}
+                style={[
+                  styles.featureCard,
+                  {
+                    backgroundColor: mutedSurface,
+                    borderColor: theme.border,
+                  },
+                ]}
+                onPress={() => navigation.navigate(feature.screen)}
+                activeOpacity={0.8}
+              >
+                <View
+                  style={[
+                    styles.featureIconBg,
+                    { backgroundColor: `${feature.color}18` },
+                  ]}
+                >
+                  <Text style={styles.featureIconText}>{feature.icon}</Text>
+                </View>
+                <Text style={[styles.featureTitle, { color: theme.text }]}>
+                  {feature.title}
+                </Text>
               <Text style={[styles.featureDesc, { color: theme.textSecondary }]}>
                 {feature.description}
               </Text>
-            </View>
-            <Text style={[styles.featureArrow, { color: feature.color }]}>›</Text>
-          </TouchableOpacity>
-        ))}
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -106,30 +144,64 @@ const styles = StyleSheet.create({
     paddingVertical: spacings.lg,
     paddingBottom: spacings.xl * 5,
   },
-  titleBlock: {
-    marginBottom: spacings.lg,
+  heroCard: {
+    borderWidth: 1,
+    borderRadius: borderRadius.xxl,
+    padding: spacings.xl,
+    marginBottom: spacings.xl,
+  },
+  heroBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#C41E3A',
+    borderRadius: borderRadius.full,
+    paddingHorizontal: spacings.md,
+    paddingVertical: spacings.xs,
+    marginBottom: spacings.md,
+  },
+  heroBadgeText: {
+    color: '#FFFFFF',
+    fontSize: fontSizes.xs,
+    fontWeight: '700',
   },
   pageTitle: {
-    fontSize: fontSizes.xl,
+    fontSize: fontSizes.xxl,
     fontWeight: 'bold',
-    marginBottom: spacings.xs,
+    marginBottom: spacings.sm,
   },
   pageSubtitle: {
+    fontSize: fontSizes.md,
+    lineHeight: 22,
+  },
+  sectionCard: {
+    borderWidth: 1,
+    borderRadius: borderRadius.xl,
+    padding: spacings.lg,
+    ...shadows.sm,
+  },
+  sectionLabel: {
+    fontSize: fontSizes.xs,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
+    marginBottom: spacings.sm,
+  },
+  sectionTitle: {
+    fontSize: fontSizes.lg,
+    fontWeight: '700',
+    marginBottom: spacings.xs,
+  },
+  sectionSubtitle: {
     fontSize: fontSizes.sm,
     lineHeight: 20,
+    marginBottom: spacings.lg,
   },
-  featureRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: spacings.lg,
-    borderRadius: borderRadius.lg,
-    borderWidth: 1,
-    marginBottom: spacings.md,
+  featureGrid: {
     gap: spacings.md,
-    elevation: 2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+  },
+  featureCard: {
+    borderWidth: 1,
+    borderRadius: borderRadius.lg,
+    padding: spacings.lg,
   },
   featureIconBg: {
     width: 52,
@@ -137,10 +209,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: spacings.md,
   },
   featureIconText: { fontSize: 26 },
-  featureTextBlock: { flex: 1 },
-  featureTitle: { fontSize: fontSizes.md, fontWeight: 'bold', marginBottom: 2 },
-  featureDesc: { fontSize: fontSizes.sm },
-  featureArrow: { fontSize: 28, fontWeight: 'bold' },
+  featureTitle: { fontSize: fontSizes.md, fontWeight: 'bold', marginBottom: spacings.xs },
+  featureDesc: { fontSize: fontSizes.sm, lineHeight: 20 },
 });
